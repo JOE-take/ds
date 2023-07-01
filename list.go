@@ -1,6 +1,8 @@
 package ds
 
-import "fmt"
+import (
+	"fmt"
+)
 
 type Node[T any] struct {
 	value T
@@ -60,6 +62,12 @@ func (l *List[T]) IsEmpty() bool {
 	return l.size == 0
 }
 
+func (l *List[T]) Initialize() {
+	l.head = nil
+	l.tail = nil
+	l.size = 0
+}
+
 // Append リストの末尾に新しいノードを追加し、それを末尾とする。
 func (l *List[T]) Append(element T) {
 	newNode := Node[T]{
@@ -78,10 +86,11 @@ func (l *List[T]) Append(element T) {
 	}
 }
 
-// Insert 現在ノードの次に新しいノードを挿入する。
+// Insert 現在ノードの次に新しいノードを挿入
 func (l *List[T]) Insert(node *Node[T], element T) {
 	if node.next == nil {
 		l.Append(element)
+		return
 	}
 	newNode := Node[T]{
 		value: element,
@@ -91,6 +100,24 @@ func (l *List[T]) Insert(node *Node[T], element T) {
 	node.next.prev = &newNode
 	node.next = &newNode
 	l.size++
+}
+
+// Remove リストからノードを削除
+func (l *List[T]) Remove(node *Node[T]) {
+	switch {
+	case node.next == nil && node.prev == nil:
+
+	case node.next == nil:
+		node.prev.next = nil
+		l.tail = node.prev
+	case node.prev == nil:
+		node.next.prev = nil
+		l.head = node.next
+	default:
+		node.next.prev = node.prev
+		node.prev.next = node.next
+	}
+	l.size--
 }
 
 // ShowAll リストの全ての要素をスペース区切りで表示
@@ -104,4 +131,17 @@ func (l *List[T]) ShowAll() {
 		cur = cur.next
 	}
 	fmt.Println()
+}
+
+// ToSlice リストをスライスに変換
+func (l *List[T]) ToSlice() []T {
+	arr := make([]T, l.size)
+
+	cur := l.head
+	for i := 0; cur != nil; i++ {
+		arr[i] = cur.value
+		cur = cur.next
+	}
+
+	return arr
 }

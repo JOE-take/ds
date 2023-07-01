@@ -1,6 +1,7 @@
 package ds
 
 import (
+	"reflect"
 	"testing"
 )
 
@@ -53,5 +54,34 @@ func Test_List_Integer(t *testing.T) {
 		t.Errorf("Expected: 2, Actual: %d", cur.Get())
 	}
 
-	l.ShowAll()
+	l.Initialize()
+	l.Append(1)
+	l.Append(2)
+	l.Append(3)
+	l.Append(4)
+
+	if l.Size() != 4 {
+		t.Errorf("Expected: 4, Actual: %d", l.Size())
+	}
+
+	l.Remove(l.Head())
+	if l.Size() != 3 {
+		t.Errorf("Expected: 3, Actual: %d", l.Size())
+	}
+
+	test := []int{2, 3, 4}
+	arr := l.ToSlice()
+	if !reflect.DeepEqual(test, arr) {
+		t.Errorf("Expected: %v, Actual: %v", test, arr)
+	}
+
+	cur = l.Head()
+	cur, _ = cur.Next()
+	l.Insert(cur, 0)
+	test = []int{2, 3, 0, 4}
+	arr = l.ToSlice()
+	if !reflect.DeepEqual(test, arr) {
+		t.Errorf("Expected: %v, Actual: %v", test, arr)
+	}
+
 }
