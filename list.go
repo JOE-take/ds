@@ -99,7 +99,7 @@ func (l *List[T]) ShowAll() {
 		return
 	}
 	cur := l.head
-	for cur.next != nil {
+	for cur != nil {
 		fmt.Print(cur.value, " ")
 		cur = cur.next
 	}

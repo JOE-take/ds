@@ -52,4 +52,6 @@ func Test_List_Integer(t *testing.T) {
 	if cur.Get() != 2 {
 		t.Errorf("Expected: 2, Actual: %d", cur.Get())
 	}
+
+	l.ShowAll()
 }
